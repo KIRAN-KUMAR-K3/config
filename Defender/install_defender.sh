@@ -14,7 +14,7 @@ echo "=== Installing required dependencies ==="
 sudo apt-get install -y curl libplist-utils gnupg apt-transport-https
 
 echo "=== Adding Microsoft package repository ==="
-curl -o microsoft.list https://packages.microsoft.com/config/ubuntu/20.04/prod.list
+curl -o microsoft.list https://packages.microsoft.com/config/ubuntu/24.04/prod.list
 sudo mv microsoft.list /etc/apt/sources.list.d/microsoft-prod.list
 
 echo "=== Adding Microsoft GPG key ==="
