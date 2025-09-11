@@ -111,3 +111,6 @@ Troubleshooting tips:
   * Check agent logs and create diagnostics: sudo mdatp diagnostic create
   * If service fails, ensure systemd is present and working (mdatp depends on systemd). See Microsoft docs.
 EOF
+
+
+##end
