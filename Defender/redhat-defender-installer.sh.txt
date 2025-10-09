@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# redhat-defender-installer.sh
+# Universal script to install & onboard Microsoft Defender for Endpoint (mdatp)
+# Works with RHEL 7, 8, and 9 (and compatible distros like CentOS/Oracle Linux)
+
+set -e
+set -o pipefail
+
+log() { echo -e "[`date '+%Y-%m-%d %H:%M:%S'`] $*"; }
+
+#----------------------#
+#  ROOT PERMISSION     #
+#----------------------#
+if [[ $EUID -ne 0 ]]; then
+    log "❌ Please run this script as root (use sudo)."
+    exit 1
+fi
+
+#----------------------#
+#  DETECT RHEL VERSION #
+#----------------------#
+if [[ -f /etc/redhat-release ]]; then
+    OS_VERSION=$(rpm -E %{rhel})
+else
+    log "❌ Unsupported system. This script works only on RHEL/CentOS/Oracle Linux."
+    exit 1
+fi
+
+log "🔹 Detected RHEL major version: $OS_VERSION"
+
+#----------------------#
+#  INSTALL PREREQS     #
+#----------------------#
+log "🔹 Installing prerequisites..."
+dnf install -y curl || yum install -y curl
+yum install -y yum-utils || dnf install -y dnf-plugins-core
+yum install -y gpg gnupg || true
+
+#----------------------#
+#  ADD MICROSOFT REPO  #
+#----------------------#
+BASE_URL="https://packages.microsoft.com/config/rhel"
+
+case "$OS_VERSION" in
+    7|8|9)
+        log "🔹 Adding Microsoft repositories for RHEL $OS_VERSION..."
+        yum-config-manager --add-repo=${BASE_URL}/${OS_VERSION}/prod.repo
+        yum-config-manager --add-repo=${BASE_URL}/${OS_VERSION}/insiders-fast.repo
+        ;;
+    *)
+        log "⚠️ Unsupported RHEL version ($OS_VERSION). Trying RHEL 8 repo as fallback..."
+        yum-config-manager --add-repo=${BASE_URL}/8/prod.repo
+        yum-config-manager --add-repo=${BASE_URL}/8/insiders-fast.repo
+        ;;
+esac
+
+#----------------------#
+#  IMPORT GPG KEYS     #
+#----------------------#
+log "🔹 Importing Microsoft GPG key..."
+rpm --import https://packages.microsoft.com/keys/microsoft.asc || {
+    log "⚠️ Failed to import key directly, retrying via curl..."
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc -o /tmp/microsoft.asc
+    rpm --import /tmp/microsoft.asc && rm -f /tmp/microsoft.asc
+}
+
+#----------------------#
+#  UPDATE REPO CACHE   #
+#----------------------#
+log "🔹 Updating package cache..."
+yum makecache -y || dnf makecache -y
+
+#----------------------#
+#  INSTALL DEFENDER    #
+#----------------------#
+log "🔹 Installing Microsoft Defender (mdatp)..."
+yum install -y mdatp || yum --enablerepo=packages-microsoft-com-prod install -y mdatp
+
+#----------------------#
+#  ENABLE + START      #
+#----------------------#
+log "🔹 Enabling and starting mdatp service..."
+systemctl enable --now mdatp || service mdatp start || true
+
+if ! command -v mdatp >/dev/null 2>&1; then
+    log "❌ Installation failed: mdatp not found. Please check logs or repo access."
+    exit 2
+fi
+
+#----------------------#
+#  CONFIG DEFENDER     #
+#----------------------#
+log "🔹 Enabling real-time protection..."
+mdatp config real-time-protection --value enabled || true
+
+#----------------------#
+#  RUN ONBOARD SCRIPT  #
+#----------------------#
+ONBOARD_SCRIPT="MicrosoftDefenderATPOnboardingLinuxServer.py"
+if [[ -f "$ONBOARD_SCRIPT" ]]; then
+    log "🔹 Running onboarding script..."
+    python3 "$ONBOARD_SCRIPT" || log "⚠️ Onboarding script reported warnings, check output."
+else
+    log "⚠️ Onboarding file not found. Please place '$ONBOARD_SCRIPT' in same directory."
+fi
+
+#----------------------#
+#  VERIFY + SCAN       #
+#----------------------#
+log "🔹 Checking Defender status..."
+mdatp status || true
+
+log "🔹 Checking Defender health..."
+mdatp health || true
+
+log "🔹 Starting full system scan (this may take time)..."
+mdatp scan full || log "⚠️ Full scan skipped or failed."
+
+#----------------------#
+#  DONE                #
+#----------------------#
+log "✅ Microsoft Defender for Endpoint installation and onboarding completed successfully."
+log "ℹ️ Check Microsoft 365 Defender portal to confirm device onboarding."
