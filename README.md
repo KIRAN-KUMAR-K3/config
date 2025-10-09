@@ -10,9 +10,9 @@
 
 ## 📖 Overview
 
-This repository provides **automation scripts** to **install, configure, and manage** essential **cybersecurity and server tools** on **Linux systems**.
+This repository provides **automation scripts** to **install, configure, and manage** essential **cybersecurity, trading, and networking tools** on **Linux systems**.
 
-Each module is built for **quick deployment**, **reliability**, and **reproducibility**, reducing setup complexity for system administrators, cybersecurity analysts, and DevOps teams.
+Each module is optimized for **speed, reliability, and reproducibility**, enabling **system administrators, DevOps engineers, and cybersecurity analysts** to deploy tools effortlessly in both personal and enterprise environments.
 
 ---
 
@@ -34,6 +34,10 @@ config/
 │   ├── packetfence-install.sh
 │   └── README.md
 │
+├── MT4-MT5-setup/                # MetaTrader 4 / MetaTrader 5 installation automation
+│   ├── mt4-mt5-setup.sh
+│   └── README.md
+│
 └── README.md                     # Main documentation
 ```
 
@@ -45,12 +49,12 @@ config/
 
 * **Location:** `Defender/`
 * **Description:**
-  Automates the installation and onboarding of **Microsoft Defender for Endpoint** on **RHEL (7/8/9)** and **Ubuntu (18.04–24.04)** systems.
+  Automates installation and onboarding of **Microsoft Defender for Endpoint** on **RHEL (7/8/9)** and **Ubuntu (18.04–24.04)**.
 * **Features:**
 
-  * Auto-detects OS version and applies correct repository.
-  * Installs and enables Defender real-time protection.
-  * Includes health and full system scan commands.
+  * Auto-detects OS version and sets correct repositories.
+  * Installs dependencies and enables real-time protection.
+  * Runs post-install Defender health and status checks.
 
 **Usage Example:**
 
@@ -73,12 +77,12 @@ sudo ./ubuntu-defender-installer.sh
 
 * **Location:** `openvas-setup/`
 * **Description:**
-  Full automation script for installing and configuring **OpenVAS vulnerability scanner**.
+  Automates full installation and configuration of **OpenVAS**, the Greenbone Vulnerability Management (GVM) suite.
 * **Features:**
 
-  * Cleans old installations.
-  * Installs dependencies and services.
-  * Starts GVM, creates admin account, and resets credentials if required.
+  * Cleans up old installations.
+  * Installs required packages and services.
+  * Starts GVM, creates admin user, and resets credentials if needed.
 
 **Usage Example:**
 
@@ -94,12 +98,12 @@ chmod +x gvm-installer-and-setup.sh
 
 * **Location:** `packetfence-setup/`
 * **Description:**
-  Automates setup of **PacketFence Network Access Control** system on Debian-based distributions.
+  Automates setup of **PacketFence Network Access Control (NAC)** on Debian-based Linux distributions.
 * **Features:**
 
-  * Adds official PacketFence repository.
-  * Imports GPG key and installs NAC components.
-  * Runs configuration commands post-installation.
+  * Adds official repository and imports GPG keys.
+  * Installs all necessary NAC components.
+  * Performs basic configuration steps post-install.
 
 **Usage Example:**
 
@@ -107,6 +111,28 @@ chmod +x gvm-installer-and-setup.sh
 cd packetfence-setup
 chmod +x packetfence-install.sh
 ./packetfence-install.sh
+```
+
+---
+
+### 💹 **MT4 / MT5 Installation Automation (Linux)**
+
+* **Location:** `MT4-MT5-setup/`
+* **Description:**
+  Automates installation of **MetaTrader 4** and **MetaTrader 5** trading platforms on Linux using **Wine** and **Winetricks**.
+* **Features:**
+
+  * Installs all dependencies required for Wine.
+  * Configures Wine environment for stable MT4/MT5 performance.
+  * Downloads and installs the official MetaTrader installer automatically.
+  * Compatible with Ubuntu, Debian, and Kali Linux.
+
+**Usage Example:**
+
+```bash
+cd MT4-MT5-setup
+chmod +x mt4-mt5-setup.sh
+./mt4-mt5-setup.sh
 ```
 
 ---
@@ -120,13 +146,19 @@ git clone https://github.com/KIRAN-KUMAR-K3/config.git
 cd config
 ```
 
-### 2️⃣ Choose a Tool to Install
+### 2️⃣ Navigate to the Desired Tool
 
-Navigate to the tool folder you want to automate (e.g., Defender, OpenVAS, PacketFence).
+Example:
 
-### 3️⃣ Run the Installer
+```bash
+cd Defender
+# or
+cd openvas-setup
+# or
+cd MT4-MT5-setup
+```
 
-Make the script executable and run it as root:
+### 3️⃣ Run the Installation Script
 
 ```bash
 chmod +x scriptname.sh
@@ -137,11 +169,12 @@ sudo ./scriptname.sh
 
 ## 🧰 Tools Covered
 
-| Tool                                | Purpose                                   | Supported OS        |
-| ----------------------------------- | ----------------------------------------- | ------------------- |
-| 🛡️ Microsoft Defender for Endpoint | Endpoint protection and malware detection | Ubuntu / RHEL       |
-| 🧠 OpenVAS (GVM)                    | Vulnerability scanning and analysis       | Debian / Kali Linux |
-| 🔐 PacketFence NAC                  | Network access control system             | Debian / Ubuntu     |
+| Tool                                | Purpose                                 | Supported OS        |
+| ----------------------------------- | --------------------------------------- | ------------------- |
+| 🛡️ Microsoft Defender for Endpoint | Endpoint protection and malware defense | Ubuntu / RHEL       |
+| 🧠 OpenVAS (GVM)                    | Vulnerability assessment and scanning   | Debian / Kali Linux |
+| 🔐 PacketFence NAC                  | Network access control system           | Debian / Ubuntu     |
+| 💹 MetaTrader 4 & 5                 | Financial trading and automation setup  | Ubuntu / Debian     |
 
 ---
 
@@ -156,23 +189,24 @@ Cybersecurity | Linux Automation | Ethical Hacking
 
 ## 🪪 License
 
-This repository is licensed under the **MIT License**.
-Feel free to use, modify, and distribute with attribution.
+This project is licensed under the **MIT License**.
+You are free to use, modify, and distribute with attribution.
 
 ---
 
 ## 📚 References
 
 * [Microsoft Defender for Endpoint on Linux](https://learn.microsoft.com/en-us/defender-endpoint/linux-install-manually)
-* [OpenVAS / Greenbone Docs](https://greenbone.github.io/docs/latest/)
+* [Greenbone OpenVAS Docs](https://greenbone.github.io/docs/latest/)
 * [PacketFence Documentation](https://packetfence.org/documentation.html)
+* [MetaTrader Official Site](https://www.metatrader5.com/en/terminal/help/start_advanced/install_linux)
 
 ---
 
 ### 💡 Professional Note
 
-> All scripts in this repository are designed for **secure enterprise deployments**.
-> They include built-in checks, version detection, and minimal user intervention.
-> Ideal for **DevSecOps**, **SOC automation**, and **cybersecurity research environments**.
+> All scripts are tested and optimized for **enterprise and personal Linux environments**.
+> They include error handling, environment checks, and automated configurations for smoother deployment.
+> Ideal for **SOC automation**, **DevSecOps**, **system hardening**, and **financial platform setup** on Linux.
 
 ---
