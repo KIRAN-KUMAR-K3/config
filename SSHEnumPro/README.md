@@ -38,35 +38,35 @@
 ## 🚀 **Quick Start**
 
 ### **Installation**
-```
+```bash
 git clone https://github.com/KIRAN-KUMAR-K3/config.git
 cd config/SSHEnumPro
 pip3 install -r requirements.txt
-chmod +x SSHEnumPro.py
+chmod +x sshenum.py
 ```
 
 ### **Usage Examples**
 
-```
+```bash
 # Single user test
-python3 SSHEnumPro.py 192.168.1.100:22 -u admin
+python3 sshenum.py 192.168.1.100:22 -u admin
 
 # User list (common users)
-python3 SSHEnumPro.py target.com:2222 -U /usr/share/wordlists/dirb/common.txt
+python3 sshenum.py target.com:2222 -U /usr/share/wordlists/dirb/common.txt
 
 # Aggressive mode
-python3 SSHEnumPro.py 10.0.0.1:22 -U users.txt -t 16 -f 3.0 -T 5
+python3 sshenum.py 10.0.0.1:22 -U users.txt -t 16 -f 3.0 -T 5
 
 # Stealth mode
-python3 SSHEnumPro.py target.com:2222 -u admin -q
+python3 sshenum.py target.com:2222 -u admin -q
 ```
 
 ---
 
 ## 📋 **Command Line Options**
 
-```
-python3 SSHEnumPro.py <host:port> [OPTIONS]
+```bash
+python3 sshenum.py <host:port> [OPTIONS]
 
   -u, --user USER         Single username to test
   -U, --userlist FILE     Username list file
@@ -116,7 +116,7 @@ python3 SSHEnumPro.py <host:port> [OPTIONS]
 
 ## 📈 **VAPT Report Integration**
 
-```
+```json
 [
   {
     "user": "admin",
@@ -134,7 +134,7 @@ python3 SSHEnumPro.py <host:port> [OPTIONS]
 
 ## 🐳 **Docker Support**
 
-```
+```bash
 docker build -t sshenumpro .
 docker run -it sshenumpro 192.168.1.100:22 -u admin
 ```
@@ -143,6 +143,7 @@ docker run -it sshenumpro 192.168.1.100:22 -u admin
 
 ## 🔒 **Requirements**
 
+Create `requirements.txt`:
 ```
 paramiko>=3.0.0
 numpy>=1.24.0
@@ -164,11 +165,10 @@ For educational & authorized security testing purposes.
 **Kiran Kumar K**  
 💻 [GitHub](https://github.com/KIRAN-KUMAR-K3) | 🐛 [Bugcrowd](https://bugcrowd.com/KIRAN-KUMAR-K) | 📧 kirankumar.k0000  
 **Ethical Hacker | Cybersecurity Researcher**
-
 ---
 
 **⭐ Star this repo if it helped your pentest!**  
 **🐛 Found a bug? [Open an issue](https://github.com/KIRAN-KUMAR-K3/config/issues)**
 
 ![Pentest Success](https://img.shields.io/badge/Pentest-Tool-brightgreen)
-```
+
