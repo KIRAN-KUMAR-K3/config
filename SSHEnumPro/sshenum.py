@@ -145,8 +145,8 @@ class SSHEnumPro:
                 print(f"{bcolors.OKGREEN}[+] VALID USER: {user.strip()} "
                       f"(τ={mean_timing:.4f}s | {confidence:.1f}%){bcolors.ENDC}")
             else:
-                if not self.args.silent:
-                    print(f"{bcolors.FAIL}[-] {user.strip()} "
+                if not self.args.quit:
+                    print(f"{bcolors.FAIL}[-] VALID USER: {user.strip()} "
                           f"(τ={mean_timing:.4f}s | {confidence:.1f}%){bcolors.ENDC}")
 
     def export_results(self):
