@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Configuration - Base Paths
+# configuration - base paths
 DOS_LOG_DIR="/mnt/firewall-logs/Firewall-Logs/Firewall"
 MAC_LOG_DIR="/mnt/firewall-logs/Firewall-Logs/Mac_IP"
 RAD_LOG_DIR="/mnt/radius-logs/primary-radius"
