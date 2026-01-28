@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IISc ISO — Security Assessment Banner</title>
+<style>
+  :root{
+    --bg:#0a0f14;
+    --bg2:#03060a;
+    --grid:#0b1e2a;
+    --iso:#00ffd5;
+    --accent:#00e5ff;
+    --hot:#ff3366;
+    --amber:#f9c642;
+    --lime:#b4ff39;
+    --muted:#9aa5b1;
+    --card:#0e1720cc;
+    --glow: drop-shadow(0 0 10px rgba(0,229,255,.35))
+            drop-shadow(0 0 30px rgba(0,229,255,.15))
+            drop-shadow(0 0 60px rgba(0,229,255,.10));
+  }
+
+  /* Global reset */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: ui-sans-serif,system-ui,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;
+    background: radial-gradient(1200px 800px at 80% 20%, rgba(0,229,255,.09), transparent 60%),
+                radial-gradient(1000px 700px at 10% 80%, rgba(255,51,102,.08), transparent 60%),
+                linear-gradient(180deg, var(--bg), var(--bg2) 80%);
+    color:#e6eef6; letter-spacing:.2px;
+    overflow-x:hidden;
+  }
+
+  /* Subtle animated grid */
+  .grid::before{
+    content:""; position:fixed; inset:-2px; pointer-events:none;
+    background:
+      linear-gradient(transparent 95%, rgba(255,255,255,.06) 96%) 0 0/100% 14px,
+      linear-gradient(90deg, transparent 95%, rgba(255,255,255,.06) 96%) 0 0/14px 100%;
+    mix-blend-mode:overlay; opacity:.15; animation:gridMove 32s linear infinite;
+  }
+  @keyframes gridMove{to{transform:translateY(14px)}}
+
+  /* Matrix rain (lightweight) */
+  .matrix{
+    position:fixed; inset:0; pointer-events:none; overflow:hidden; opacity:.3;
+    background-image: repeating-linear-gradient(180deg, rgba(180,255,57,.06) 0 2px, transparent 2px 4px);
+    animation:scan 6s linear infinite;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 60%, transparent 105%);
+  }
+  @keyframes scan{
+    0%{background-position:0 -100vh}
+    100%{background-position:0 0}
+  }
+
+  /* Container */
+  .shell{
+    max-width:1100px; margin:0 auto; padding:7vh 24px 10vh; position:relative;
+  }
+
+  /* Glitch heading */
+  .glitch{
+    font-size:clamp(28px, 5vw, 52px);
+    font-weight:800; line-height:1.05; letter-spacing:.5px;
+    position:relative; display:inline-block;
+    color:var(--accent); filter:var(--glow);
+    text-shadow:
+      0 0 1px rgba(0,229,255,.7),
+      0 0 12px rgba(0,229,255,.4);
+  }
+  .glitch::before, .glitch::after{
+    content:attr(data-text); position:absolute; inset:0;
+    clip-path: polygon(0 2%, 100% 0, 100% 48%, 0 50%);
+    mix-blend-mode:screen; opacity:.75;
+  }
+  .glitch::before{
+    color:var(--hot); transform:translate(-2px,-1px); filter:drop-shadow(0 0 10px rgba(255,51,102,.35));
+    animation:gl1 2.8s infinite ease-in-out alternate;
+  }
+  .glitch::after{
+    color:var(--lime); transform:translate(2px,1px); filter:drop-shadow(0 0 10px rgba(180,255,57,.3));
+    animation:gl2 2.8s infinite ease-in-out alternate-reverse;
+  }
+  @keyframes gl1{50%{transform:translate(-1px,0)} 90%{transform:translate(-3px,1px)}}
+  @keyframes gl2{50%{transform:translate(1px,0)} 90%{transform:translate(3px,-1px)}}
+
+  .sub{
+    margin-top:8px; color:var(--muted); font-size:clamp(14px, 1.8vw, 16px);
+  }
+
+  /* Cards */
+  .deck{display:grid; gap:16px; margin-top:28px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .card{
+    background:linear-gradient(180deg, rgba(14,23,32,.9), rgba(10,15,20,.85));
+    border:1px solid rgba(0,229,255,.12);
+    border-radius:14px; padding:18px 18px 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 1px rgba(0,229,255,.04) inset, 0 12px 40px rgba(0,0,0,.35);
+  }
+  .card h3{
+    margin:0 0 8px; font-size:16px; color:#dffcff; font-weight:700;
+    text-shadow:0 0 10px rgba(0,229,255,.25);
+  }
+  .card p{margin:0; color:#c8d1da; font-size:14px}
+  .card .tag{
+    display:inline-block; margin-bottom:10px; padding:4px 10px; font-size:12px; letter-spacing:.4px;
+    border-radius:999px; color:#001419; background:linear-gradient(90deg, var(--accent), var(--iso));
+    box-shadow: 0 0 18px rgba(0,229,255,.25); font-weight:700;
+  }
+  .card.warn{border-color:rgba(249,198,66,.25)}
+  .card.warn h3{color:#fff2c2; text-shadow:0 0 8px rgba(249,198,66,.35)}
+  .card.danger{border-color:rgba(255,51,102,.28)}
+  .card.danger h3{color:#ffd7e1; text-shadow:0 0 8px rgba(255,51,102,.35)}
+  .card.success{border-color:rgba(180,255,57,.25)}
+  .card.success h3{color:#ebffcf; text-shadow:0 0 8px rgba(180,255,57,.35)}
+
+  /* Code block style */
+  .code{
+    margin-top:14px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size:13px; background:#061018; color:#aee2ff; border:1px solid rgba(0,229,255,.18);
+    border-radius:10px; padding:12px; overflow:auto;
+    box-shadow: inset 0 0 24px rgba(0,229,255,.06);
+  }
+  .code .ok{color:var(--lime)}
+  .code .warn{color:var(--amber)}
+  .code .bad{color:var(--hot)}
+  .code .info{color:var(--accent)}
+
+  /* Footer callout */
+  .cta{
+    margin-top:28px; padding:18px; border:1px dashed rgba(0,229,255,.28); border-radius:14px;
+    background:linear-gradient(90deg, rgba(0,229,255,.06), rgba(255,51,102,.06));
+    text-align:center;
+  }
+  .cta strong{color:#ffffff}
+  .cta .btn{
+    display:inline-block; margin-top:10px; padding:10px 16px; border-radius:10px;
+    color:#001419; background:linear-gradient(90deg, var(--hot), var(--accent));
+    font-weight:800; letter-spacing:.4px; text-decoration:none; filter:var(--glow);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  /* Top corner badge */
+  .badge{
+    position:fixed; top:14px; right:14px; z-index:5; font-size:12px;
+    color:#001419; font-weight:900; letter-spacing:.5px;
+    background:linear-gradient(90deg, var(--accent), var(--iso));
+    padding:8px 12px; border-radius:999px; filter:var(--glow);
+  }
+
+  /* Small screen tweaks */
+  @media (max-width:520px){
+    .glitch{font-size:28px}
+  }
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="matrix"></div>
+
+<div class="badge">ISO • CONTROLLED TEST</div>
+
+<main class="shell">
+  <h1 class="glitch" data-text="SECURITY ALERT — ISO TESTING MODE">
+    SECURITY ALERT — ISO TESTING MODE
+  </h1>
+  <div class="sub">
+    IISc Information Security Office (ISO), Bengaluru — controlled proof‑of‑concept to demonstrate risk from an exposed PHP File Manager.
+  </div>
+
+  <section class="deck" aria-label="risk overview">
+    <article class="card danger">
+      <span class="tag">CRITICAL RISK</span>
+      <h3>Unrestricted File‑System Access</h3>
+      <p>Exposed file manager enables browsing, editing, deleting and <strong>uploading</strong> files in the web root without authentication.</p>
+      <div class="code" role="region" aria-label="evidence">
+        <div><span class="bad">[!] </span> Public endpoint accessible: <span class="info">/occapapp/fas.php</span></div>
+        <div><span class="bad">[!] </span> Upload succeeded: <span class="ok">test.html</span></div>
+        <div><span class="bad">[!] </span> Executed via public URL: <span class="info">/occapapp/uploads/test.html</span></div>
+      </div>
+    </article>
+
+    <article class="card warn">
+      <span class="tag">DATA EXPOSURE</span>
+      <h3>Database & Secrets at Risk</h3>
+      <p>Config files (e.g., <code>dbconn.php</code>) can be downloaded, exposing database credentials and enabling full CRUD on application data.</p>
+      <div class="code" role="region" aria-label="possible impact">
+        <div><span class="warn">[~] </span> Read/Download app configs</div>
+        <div><span class="warn">[~] </span> Extract DB credentials → query/modify data</div>
+        <div><span class="warn">[~] </span> Tamper application logic & permissions</div>
+      </div>
+    </article>
+
+    <article class="card success">
+      <span class="tag">REMEDIATION</span>
+      <h3>Immediate Actions</h3>
+      <p>Remove <code>fas.php</code> from production, block PHP execution in <code>/uploads/</code>, and rotate exposed credentials.</p>
+      <div class="code" role="region" aria-label="actions">
+        <div><span class="ok">[+] </span> Remove file manager: <code>fas.php</code></div>
+        <div><span class="ok">[+] </span> Disable PHP in uploads (webserver &amp; .htaccess)</div>
+        <div><span class="ok">[+] </span> Rotate DB/app secrets • Review logs • Patch systems</div>
+      </div>
+    </article>
+  </section>
+
+  <section class="cta" aria-label="call to action">
+    <strong>IMMEDIATE REMEDIATION REQUIRED.</strong>
+    <div>Leaving the file manager exposed permits full application compromise.</div>
+    <a class="btn" href="mailto:iso-support@iisc.ac.in?subject=Remediation%20Approval%20-%20OCCAP%20PHP%20File%20Manager">
+      CONTACT ISO & AUTHORIZE FIX
+    </a>
+  </section>
+</main>
+</body>
+</html>
